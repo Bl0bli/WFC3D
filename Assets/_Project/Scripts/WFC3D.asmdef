@@ -1,6 +1,6 @@
 {
     "name": "WFC3D",
-    "rootNamespace": "",
+    "rootNamespace": "WFC3D",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

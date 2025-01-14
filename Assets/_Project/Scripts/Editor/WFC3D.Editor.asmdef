@@ -1,7 +1,9 @@
 {
-    "name": "WFC3D_editor",
-    "rootNamespace": "",
-    "references": [],
+    "name": "WFC3D.Editor",
+    "rootNamespace": "WFC3D.Editor",
+    "references": [
+        "GUID:49a2a0d4b427b36409c658386bb28c17"
+    ],
     "includePlatforms": [
         "Editor"
     ],
