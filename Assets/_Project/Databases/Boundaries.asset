@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46ebacd3ecab452aa96310736025c85f, type: 3}
   m_Name: Boundaries
   m_EditorClassIdentifier: 
-  tileBoundsHalfSize: 0
-  boundaryTolerance: 0
-  lastIndex: 0
-  lastSymmetricIndex: 0
+  _cellSize: 0
+  _tolerance: 0

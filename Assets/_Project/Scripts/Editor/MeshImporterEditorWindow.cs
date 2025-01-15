@@ -75,10 +75,7 @@ namespace WFC3D.Editor
         #endregion
         
         private void Import() {
-            string[] boundaryIndices = _boundariesDatabase.CheckBoundaries(_mesh);
-            foreach (string index in boundaryIndices) {
-                Debug.Log(index);
-            }
+            _boundariesDatabase.CheckBoundaries(_mesh);
         }
 
     }
