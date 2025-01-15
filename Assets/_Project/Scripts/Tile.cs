@@ -1,28 +1,30 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace WFC3D
 {
     [Serializable]
-    public struct Tile
+    public struct TileStruct
     {
-        [field: SerializeField] public Mesh Mesh { get; private set; }
-        [field: SerializeField] public string Px { get; private set; }
-        [field: SerializeField] public string Nx { get; private set; }
-        [field: SerializeField] public string Py { get; private set; }
-        [field: SerializeField] public string Ny { get; private set; }
-        [field: SerializeField] public string Pz { get; private set; }
-        [field: SerializeField] public string Nz { get; private set; }
+        [SerializeField] Mesh _mesh;
+        [SerializeField] int _rotation;
 
-        Tile(Mesh mesh, string px, string nx, string py, string ny, string pz, string nz)
+        [SerializeField] string[] _faces;
+
+        [SerializeField] List<List<TileStruct>> _neighboors;
+        public Mesh Mesh { get => _mesh; }
+        public string[] Faces { get => _faces; }
+        public List<List<TileStruct>> Neighboors { get => _neighboors; }
+        public int Rotation { get => _rotation; }
+
+        TileStruct(Mesh mesh, int rotation)
         {
-            Mesh = mesh;
-            Px = px;
-            Nx = nx;
-            Py = py;
-            Ny = ny;
-            Pz = pz;
-            Nz = nz;
+            _mesh = mesh;
+            _faces = new string[6];
+            _neighboors = new List<List<TileStruct>>();
+            _rotation = rotation;    
         }
     }
+   
 }
