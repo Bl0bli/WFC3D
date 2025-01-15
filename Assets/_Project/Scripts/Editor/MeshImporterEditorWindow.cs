@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -39,14 +40,15 @@ namespace WFC3D.Editor
             if (_mesh) {
                 if (GUILayout.Button("Import")) {
                     if (_boundariesDatabase) {
-                        Boundaries boundaries = new Boundaries();
-                        GenerateBoundaries(ref boundaries);
-                        _boundariesDatabase.CheckBoundaries(boundaries);
+                        Import();
                     }
                 }
             }
 
         }
+
+        #region MeshPreviewEditor
+
         private void AddMeshPreview() {
 
             GUIStyle bgColor = new GUIStyle();
@@ -69,32 +71,15 @@ namespace WFC3D.Editor
             }
         }
 
-        private void GenerateBoundaries(ref Boundaries boundaries) {
-            foreach (Vector3 vertex in _mesh.vertices) {
-                if (vertex.x >= _boundariesDatabase.TileBoundsHalfSize - _boundariesDatabase.BoundaryTolerance) {
-                    boundaries.AxisBoundaries[0].Add(new Vector2(vertex.y, vertex.z));
-                }
 
-                if (vertex.x <= -_boundariesDatabase.TileBoundsHalfSize + _boundariesDatabase.BoundaryTolerance) {
-                    boundaries.AxisBoundaries[1].Add(new Vector2(vertex.y, vertex.z));
-                }
-                
-                if (vertex.y >= _boundariesDatabase.TileBoundsHalfSize - _boundariesDatabase.BoundaryTolerance) {
-                    boundaries.AxisBoundaries[2].Add(new Vector2(vertex.x, vertex.z));
-                }
-
-                if (vertex.y <= -_boundariesDatabase.TileBoundsHalfSize + _boundariesDatabase.BoundaryTolerance) {
-                    boundaries.AxisBoundaries[3].Add(new Vector2(vertex.x, vertex.z));
-                }
-                
-                if (vertex.z >= _boundariesDatabase.TileBoundsHalfSize - _boundariesDatabase.BoundaryTolerance) {
-                    boundaries.AxisBoundaries[4].Add(new Vector2(vertex.x, vertex.y));
-                }
-
-                if (vertex.z <= -_boundariesDatabase.TileBoundsHalfSize + _boundariesDatabase.BoundaryTolerance) {
-                    boundaries.AxisBoundaries[5].Add(new Vector2(vertex.x, vertex.y));
-                }
+        #endregion
+        
+        private void Import() {
+            string[] boundaryIndices = _boundariesDatabase.CheckBoundaries(_mesh);
+            foreach (string index in boundaryIndices) {
+                Debug.Log(index);
             }
         }
+
     }
 }
