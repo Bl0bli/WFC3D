@@ -53,12 +53,13 @@ namespace WFC3D
         }
         public List<TileStruct> GetRandomTile(List<TileStruct> _tiles)
         {
-            int count = _tiles.Count;
-            for(int i = 0; i < count - 2 ; i++)
+            while (_tiles.Count > 1)
             {
+                int count = _tiles.Count;
                 _tiles.RemoveAt(Random.Range(0, _tiles.Count - 1));
+                
             }
-
+            Debug.Log("Size:" + _tiles.Count);
             return _tiles;
         }
 
@@ -84,12 +85,12 @@ namespace WFC3D
             //}
             prefixe1 = TileStruct.GetPrefixe(face1);
             prefixe2 = TileStruct.GetPrefixe(face2);
-            Debug.Log("Prefixe: " + prefixe1);
-            Debug.Log("Prefixe: " + prefixe2);
+            //Debug.Log("Prefixe: " + prefixe1);
+            //Debug.Log("Prefixe: " + prefixe2);
             chara1 = TileStruct.GetSuffixe(face1);
             chara2 = TileStruct.GetSuffixe(face2);
-            Debug.Log("Suffixe: " + chara1);
-            Debug.Log("Suffixe: " + chara2);
+            //Debug.Log("Suffixe: " + chara1);
+            //Debug.Log("Suffixe: " + chara2);
             int num1 = 999;
             int num2 = 999;
             //if (chara1 != "")
@@ -112,9 +113,9 @@ namespace WFC3D
             //
             num1 = TileStruct.GetIndex(face1);
             num2 = TileStruct.GetIndex(face2);
-            Debug.Log("Index: " + num1);
-            Debug.Log("Index: " + num2);
-
+            //Debug.Log("Index: " + num1);
+            //Debug.Log("Index: " + num2);
+            //
             return ((num1 == num2 && (chara1 == "s" && chara2 == "s")) || // SYMETRIQUE
                 (num1 == num2 && (chara1 == "" || chara2 == "") && (chara1 == "f" || chara2 == "f")) || // ASYMETRIQUE
                 (num1 < 0 && num2 < 0)); // BORD

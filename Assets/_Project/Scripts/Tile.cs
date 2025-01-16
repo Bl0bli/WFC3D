@@ -37,6 +37,7 @@ namespace WFC3D
                     digits += c;
                 }
             }
+            if(digits == "") return 0;
             return int.Parse(digits);
         }
 

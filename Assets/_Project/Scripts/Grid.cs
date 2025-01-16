@@ -20,7 +20,7 @@ public class Grid : MonoBehaviour
         
     }
 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         for (int j = 0; j <= _gridSize / _cellSize; j++)
         {
@@ -36,5 +36,5 @@ public class Grid : MonoBehaviour
             }
         }
 
-    }
+    }*/
 }
