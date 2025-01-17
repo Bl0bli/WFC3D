@@ -10,7 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46ebacd3ecab452aa96310736025c85f, type: 3}
-  m_Name: Boundaries
+  m_Name: New Boundaries_Database
   m_EditorClassIdentifier: 
   _cellSize: 0
   _tolerance: 0
+  lastID: 0
+  lastSymmetricIndex: 0
