@@ -12,4 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1add463b81bed04caad27474bb3af04, type: 3}
   m_Name: Tiles
   m_EditorClassIdentifier: 
-  Tiles: []
+  Tiles:
+  - _mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+    _rotation: 0
+    _faces:
+    - 1s
+    - 1s
+    - 1s
+    - 1s
+    - 1s
+    - 1s
