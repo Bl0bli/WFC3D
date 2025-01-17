@@ -18,7 +18,7 @@ namespace WFC3D
                 {
                     return null;
                 }
-                for(int i = 0; i<5; i++) 
+                for(int i = 0; i<6; i++) 
                 {
                     if(CheckNeighboor(t.Faces[i], tile.Faces[i]))
                     {
