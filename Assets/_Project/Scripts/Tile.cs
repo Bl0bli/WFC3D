@@ -19,12 +19,20 @@ namespace WFC3D
         public List<List<TileStruct>> Neighboors { get => _neighboors; }
         public int Rotation { get => _rotation; }
 
-        TileStruct(Mesh mesh, int rotation)
+        public TileStruct(Mesh mesh, int rotation, string px, string nx, string py, string ny, string pz, string nz)
         {
             _mesh = mesh;
-            _faces = new string[6];
+            _faces = new string[] { px, nx, py, ny, pz, nz};
             _neighboors = new List<List<TileStruct>>();
             _rotation = rotation;
+        }
+
+        public void Rotate() {
+            _rotation++;
+            _rotation %= 4;
+
+            string[] facesCopy = new[] { _faces[5], _faces[4], _faces[2], _faces[3], _faces[0], _faces[1] }; //Rotate faces;
+            _faces = facesCopy;
         }
 
         public static int GetIndex(string ID)

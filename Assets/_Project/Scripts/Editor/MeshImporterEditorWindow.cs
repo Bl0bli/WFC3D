@@ -12,6 +12,7 @@ namespace WFC3D.Editor
         private Mesh _mesh;
         private UnityEditor.Editor _meshEditor;
         private Boundaries_Database _boundariesDatabase;
+        private Tile_Database _tileDatabase;
         
         [MenuItem("WFC3D/MeshImporter")]
         public static void Open() {
@@ -76,6 +77,12 @@ namespace WFC3D.Editor
         
         private void Import() {
             string[] indices =  _boundariesDatabase.CheckBoundaries(_mesh);
+            
+            TileStruct tile = new TileStruct(_mesh, 0, indices[0], indices[1], indices[4], indices[5], indices[2], indices[3]);
+            for (int i = 0; i < 4; i++) {
+                _tileDatabase.AddTile(tile);
+                tile.Rotate();
+            }
             
         }
 

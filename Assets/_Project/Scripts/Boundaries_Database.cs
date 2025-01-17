@@ -53,6 +53,7 @@ namespace WFC3D
                 _boundaryMap.Add(boundary, "-1");
                 return;
             }
+            _boundaryMap.Add(boundary, "-1");
             //TODO Finish
         }
         
