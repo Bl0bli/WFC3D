@@ -35,6 +35,12 @@ namespace WFC3D.Editor
                 typeof(Boundaries_Database),
                 false);
             
+            _tileDatabase = (Tile_Database)EditorGUILayout.ObjectField(
+                "Boundaries DataBase : ",
+                _tileDatabase,
+                typeof(Tile_Database),
+                false);
+            
             AddMeshField();
             AddMeshPreview();
 
@@ -82,6 +88,7 @@ namespace WFC3D.Editor
             for (int i = 0; i < 4; i++) {
                 _tileDatabase.AddTile(tile);
                 tile.Rotate();
+                Debug.Log("add tile");
             }
             
         }

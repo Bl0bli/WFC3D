@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
 using static Codice.CM.Common.CmCallContext;
+using Random = UnityEngine.Random;
 
 namespace WFC3D
 {
@@ -13,31 +14,51 @@ namespace WFC3D
         public List<TileStruct> PossibleTiles;
         public Vector3Int GridPos;
         public bool Collapsed;
-
+        public bool Visisted;
+        
         public TileGridCell(List<TileStruct> possibleTiles, Vector3Int gridPos)
         {
             PossibleTiles = new List<TileStruct>(possibleTiles);
             GridPos = gridPos;
+            Visisted = false;
             Collapsed = false;
         }
         public TileGridCell(List<TileStruct> possibleTiles, Vector3Int gridPos, bool collapsed)
         {
             PossibleTiles = new List<TileStruct>(possibleTiles);
             GridPos = gridPos;
+            Visisted = false;
             Collapsed = collapsed;
         }
         public TileGridCell(bool state)
         {
             PossibleTiles = new List<TileStruct>();
             GridPos = new Vector3Int();
+            Visisted = false;
             Collapsed = false;
         }
         public TileGridCell(TileGridCell celltoCopy)
         {
             PossibleTiles = new List<TileStruct>(celltoCopy.PossibleTiles);
-            GridPos = celltoCopy.GridPos;
+            GridPos = new Vector3Int(celltoCopy.GridPos.x, celltoCopy.GridPos.y, celltoCopy.GridPos.z);
+            Visisted = false;
             Collapsed = false;
         }
+        public TileGridCell(List<TileStruct> possibleTiles) {
+            PossibleTiles = new List<TileStruct>(possibleTiles);
+            GridPos = new Vector3Int(0, 0, 0);
+            Visisted = false;
+            Collapsed = false;
+        }
+
+        public void Collapse() {
+            int rnd = Random.Range(0, PossibleTiles.Count - 1);
+            TileStruct selectedTile = PossibleTiles[rnd];
+            PossibleTiles = new List<TileStruct>();
+            PossibleTiles.Add(selectedTile);
+            Collapsed = true;
+        }
+        
         public void UpdatePossibleTilesFromCell(int direction, Tile_Database tileDatabase)
         {
             List<TileStruct> _p = new List<TileStruct>(PossibleTiles);
@@ -48,6 +69,16 @@ namespace WFC3D
                     PossibleTiles.Remove(t);
                 }
             }
+        }
+        public void Remove(TileStruct tile) {
+            List<TileStruct> newPossibleTile = new List<TileStruct>();
+            foreach (TileStruct possibleTile in PossibleTiles) {
+                if (possibleTile != tile) {
+                    newPossibleTile.Add(possibleTile);
+                }
+            }
+
+            PossibleTiles = newPossibleTile;
         }
     }
 }
@@ -72,7 +103,7 @@ namespace WFC3D
             rangeMAX = _grid.GridSize / _grid.CellSize;
             //Debug.Log("RANGEMAX = " + rangeMAX);
             _gridData = new TileGridCell[rangeMAX, rangeMAX, rangeMAX];
-            for (int i = 0; i < rangeMAX; i++) // On pré rempli le table de donnée de la grille par défaut
+            for (int i = 0; i < rangeMAX; i++) // On prï¿½ rempli le table de donnï¿½e de la grille par dï¿½faut
             {
                 for (int j = 0; j < rangeMAX; j++)
                 {
@@ -146,7 +177,7 @@ namespace WFC3D
         {
             if (CellToCollapse.Collapsed)
             {
-                Debug.Log(" Déjà Collapsed");
+                Debug.Log(" Dï¿½jï¿½ Collapsed");
                 return new TileGridCell(new List<TileStruct>(), new Vector3Int());
             }
 
@@ -166,7 +197,7 @@ namespace WFC3D
             CellToCollapse.Collapsed = true;
             if (possibleTiles.Count <= 0) 
             {
-                Debug.Log("Pas de Tile Possible, Non Instancié");
+                Debug.Log("Pas de Tile Possible, Non Instanciï¿½");
                 return new TileGridCell(new List<TileStruct>(), new Vector3Int());
             }
             GameObject go = new GameObject();

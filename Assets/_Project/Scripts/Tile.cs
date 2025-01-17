@@ -12,18 +12,18 @@ namespace WFC3D
 
         [SerializeField] string[] _faces;                            // 0 = right, 1 = left, 2 = up, 3 = down, 4 = front, 5 = back
 
-        [SerializeField] List<List<TileStruct>> _neighboors;
+        [SerializeField] List<TileStruct>[] _neighboors;
 
         public Mesh Mesh { get => _mesh; }
         public string[] Faces { get => _faces; }
-        public List<List<TileStruct>> Neighboors { get => _neighboors; }
+        public List<TileStruct>[] Neighboors { get => _neighboors; }
         public int Rotation { get => _rotation; }
 
         public TileStruct(Mesh mesh, int rotation, string px, string nx, string py, string ny, string pz, string nz)
         {
             _mesh = mesh;
             _faces = new string[] { px, nx, py, ny, pz, nz};
-            _neighboors = new List<List<TileStruct>>();
+            _neighboors = new List<TileStruct>[]{ new List<TileStruct>(), new List<TileStruct>(), new List<TileStruct>(), new List<TileStruct>(), new List<TileStruct>(), new List<TileStruct>()};
             _rotation = rotation;
         }
 
@@ -35,12 +35,11 @@ namespace WFC3D
             _faces = facesCopy;
         }
 
-        public static int GetIndex(string ID)
-        {
+        public static int GetIndex(string ID) {
             string digits = "";
             foreach (char c in ID)
             {
-                if (char.IsDigit(c))
+                if (char.IsDigit(c) || c.ToString() == "-")
                 {
                     digits += c;
                 }
@@ -67,6 +66,18 @@ namespace WFC3D
         {
             if (ID.Contains("v")) return "v";
             return "";
+        }
+
+        public static bool operator==(TileStruct a, TileStruct b) {
+            return a._mesh == b._mesh && a.Rotation == b.Rotation;
+        }
+        public static bool operator !=(TileStruct a, TileStruct b) {
+            return !(a == b);
+        }
+
+        public override bool Equals(object obj) {
+            TileStruct tile = (TileStruct)obj;
+            return this == tile;
         }
     }
 

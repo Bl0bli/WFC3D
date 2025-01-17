@@ -10,7 +10,7 @@ namespace WFC3D
     {
         public List<TileStruct> Tiles;
 
-        public List<List<TileStruct>> AddTile(TileStruct tile)
+        public List<TileStruct>[] AddTile(TileStruct tile)
         {
             foreach (TileStruct t in Tiles)
             {
@@ -31,7 +31,7 @@ namespace WFC3D
             return tile.Neighboors;
         }
 
-        public List<List<TileStruct>> RemoveTile (TileStruct tile)
+        public List<TileStruct>[] RemoveTile (TileStruct tile)
         {
             foreach (TileStruct t in Tiles)
             {
@@ -59,7 +59,6 @@ namespace WFC3D
                 _tiles.RemoveAt(Random.Range(0, _tiles.Count - 1));
                 
             }
-            Debug.Log("Size:" + _tiles.Count);
             return _tiles;
         }
 
@@ -83,14 +82,16 @@ namespace WFC3D
             //        chara2 += c;
             //    }
             //}
+           // Debug.Log("face1 " + face1);
+           // Debug.Log("face2 " + face2);
             prefixe1 = TileStruct.GetPrefixe(face1);
             prefixe2 = TileStruct.GetPrefixe(face2);
-            //Debug.Log("Prefixe: " + prefixe1);
-            //Debug.Log("Prefixe: " + prefixe2);
+           //Debug.Log("Prefixe: " + prefixe1);
+           //Debug.Log("Prefixe: " + prefixe2);
             chara1 = TileStruct.GetSuffixe(face1);
             chara2 = TileStruct.GetSuffixe(face2);
-            //Debug.Log("Suffixe: " + chara1);
-            //Debug.Log("Suffixe: " + chara2);
+           // Debug.Log("Suffixe: " + chara1);
+           // Debug.Log("Suffixe: " + chara2);
             int num1 = 999;
             int num2 = 999;
             //if (chara1 != "")
@@ -113,8 +114,8 @@ namespace WFC3D
             //
             num1 = TileStruct.GetIndex(face1);
             num2 = TileStruct.GetIndex(face2);
-            //Debug.Log("Index: " + num1);
-            //Debug.Log("Index: " + num2);
+            //Debug.Log("num1 " + num1);
+            //Debug.Log("num2 " + num2);
             //
             return ((num1 == num2 && (chara1 == "s" && chara2 == "s")) || // SYMETRIQUE
                 (num1 == num2 && (chara1 == "" || chara2 == "") && (chara1 == "f" || chara2 == "f")) || // ASYMETRIQUE
