@@ -49,20 +49,12 @@ namespace WFC3D
 
         void WFC()
         {
-            int maxRetries = 10;  // Nombre maximum de tentatives avant de considérer qu'on a un échec
-            int retries = 0;
-
             while (!_allCells.TrueForAll(cell => cell.Collapsed))
             {
                 if (!Propagate(CollapseCell(SelectCellWithSmallestEntropy())))
                 {
-                    retries++;
-                    if (retries >= maxRetries)
-                    {
-                        Debug.LogError("Max retries reached. WFC algorithm failed.");
-                        break;
-                    }
                     ResetAlgo();
+                    Debug.Log("Retry");
                 }
             }
         }
@@ -72,10 +64,10 @@ namespace WFC3D
             range = _gridScript.GridSize / _gridScript.CellSize;
             _grid = new TileGridCell[range, range, range];
             SetGrid();
-            foreach (TileGridCell cell in _allCells)
+            /*foreach (TileGridCell cell in _allCells)
             {
                 Debug.Log(cell.PossibleTiles.Count);
-            }
+            }*/
         }
         TileGridCell SelectCellWithSmallestEntropy()
         {
@@ -85,7 +77,7 @@ namespace WFC3D
                 if (!cell.Collapsed)
                 {
                     _uncollapsedCells.Add(cell);
-                    Debug.Log(cell.GridPos);
+                    //Debug.Log(cell.GridPos);
                 }
             }
 
@@ -133,6 +125,7 @@ namespace WFC3D
                 cellToInstantiate.GridPos.y * _gridScript.CellSize, 
                 cellToInstantiate.GridPos.z * _gridScript.CellSize
                 );
+            go.transform.rotation = Quaternion.Euler(0, cellToInstantiate.PossibleTiles[0].Rotation * 90, 0);
         }
         
         bool Propagate(TileGridCell _collapsedCell)
