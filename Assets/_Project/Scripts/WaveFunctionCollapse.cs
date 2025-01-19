@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 
 namespace WFC3D
 {
-    public class TileGridCell : MonoBehaviour
+    public class TileGridCell
     {
         public List<TileStruct> PossibleTiles;
         public Vector3Int GridPos;

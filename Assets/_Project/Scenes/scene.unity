@@ -133,7 +133,6 @@ GameObject:
   - component: {fileID: 604288765}
   - component: {fileID: 604288763}
   - component: {fileID: 604288766}
-  - component: {fileID: 604288767}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -153,8 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2337d98531b3fd94193423a268362ecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cellSize: 1
-  _gridSize: 5
+  _cellSize: 2
+  _gridSize: 2
 --- !u!4 &604288765
 Transform:
   m_ObjectHideFlags: 0
@@ -180,20 +179,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba3cc2e1e77580845a483260420a9af7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gridScript: {fileID: 604288763}
-  _dtb: {fileID: 11400000, guid: f7d3c945e546fe144b4be12e247cbb68, type: 2}
---- !u!114 &604288767
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 604288762}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f576e797e10b8a4ca5fd854e56833c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _gridScript: {fileID: 604288763}

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.WSA;
 
 
 namespace WFC3D
@@ -15,18 +16,17 @@ namespace WFC3D
         public void Reset()
         {
             Tiles.Clear();
-            ID = 0;
+            TileStruct emptyTile = new TileStruct(null, 0, "-1", "-1", "-1", "-1", "-1", "-1", 0);
+            Tiles.Add(emptyTile);
+            ID = 1;
         }
         public Neighbors AddTile(TileStruct tile)
         {
             TileStruct newTile = new TileStruct(tile);
-            foreach (TileStruct t in Tiles)
+            Tiles.Add(newTile);
+            ID++;
+            foreach (TileStruct t in Tiles) 
             {
-                if (t.Mesh == newTile.Mesh && t.Rotation == newTile.Rotation)
-                {
-                    //Debug.Log(t.Rotation + " " + tile.Rotation);
-                    return null;
-                }
                 for(int i = 0; i<6; i++) 
                 {
                     bool b = CheckNeighboor(t.Faces[i], newTile.Faces[GetOppositeFace(i)]);
@@ -55,8 +55,6 @@ namespace WFC3D
                 }
             }
             //Debug.Log("Add Tile " + tile.Rotation);
-            Tiles.Add(newTile);
-            ID++;
             //newTile.SetID(_id);
             //return tile.Neighboors;
             return newTile.Neighboors;
