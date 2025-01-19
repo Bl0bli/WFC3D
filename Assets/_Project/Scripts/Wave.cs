@@ -11,16 +11,41 @@ namespace WFC3D
         [SerializeField] private Grid _gridScript;
         [SerializeField] private Tile_Database _dtb;
 
+        #region Grid
         private List<TileGridCell> _allCells;
         private TileGridCell[,,] _grid;
 
+        private List<TileGridCell> _DefaultallCells;
+        private TileGridCell[,,] _Defaultgrid;
+        #endregion
+
+        #region Propriétés locales
+        List<TileGridCell> smallestEntropyCells = new List<TileGridCell>();
+        List<TileStruct> newPossibleTiles = new List<TileStruct>();
+        List<TileStruct> propagatePossibleTiles = new List<TileStruct>();
+        TileGridCell neighbor = new TileGridCell(false);
+        Vector3Int neighborPos = new Vector3Int(0, 0, 0);
+
+
         private int _range;
+        Vector3Int[] directions = 
+            {
+                new Vector3Int(1, 0, 0), //droite
+                new Vector3Int(-1, 0, 0), //gauche
+                new Vector3Int(0, 1, 0), //haut
+                new Vector3Int(0, -1, 0), //bas
+                new Vector3Int(0, 0, 1), //devant
+                new Vector3Int(0, 0, -1) //derri�re
+            };
+        #endregion
 
         private void Start()
         {
+            _DefaultallCells = new List<TileGridCell>();
             _allCells = new List<TileGridCell>();
             _range = _gridScript.GridSize;
             _grid = new TileGridCell[_range, _range, _range];
+            _Defaultgrid = new TileGridCell[_range, _range, _range];
             SetGrid();
             WFC();
         }
@@ -35,7 +60,10 @@ namespace WFC3D
                     for (int k = 0; k < _range; k++)
                     {
                         _grid[i, j, k] = new TileGridCell(_dtb.Tiles, new Vector3Int(i, j, k), index);
+                        _Defaultgrid[i, j, k] = new TileGridCell(_dtb.Tiles, new Vector3Int(i, j, k), index);
+
                         _allCells.Add(_grid[i, j, k]);
+                        _DefaultallCells.Add(_Defaultgrid[i, j, k]);
                         index++;
                     }
                 }
@@ -69,15 +97,16 @@ namespace WFC3D
             List<TileGridCell> uncollapsedCells = _allCells.Where(cell => !cell.Collapsed).ToList();
 
             int minEntropy = int.MaxValue;
-            List<TileGridCell> smallestEntropyCells = new List<TileGridCell>();
+            smallestEntropyCells.Clear();
 
-            foreach (TileGridCell cell in uncollapsedCells)
+            for( int i = 0; i < uncollapsedCells.Count; i++)
             {
-                if (cell.PossibleTiles.Count < minEntropy && cell.PossibleTiles.Count > 0)
+                TileGridCell cell = uncollapsedCells[i];
+                if(cell.PossibleTiles.Count < minEntropy && cell.PossibleTiles.Count > 0)
                 {
                     minEntropy = cell.PossibleTiles.Count;
                     smallestEntropyCells.Clear();
-                    smallestEntropyCells.Add(cell); 
+                    smallestEntropyCells.Add(cell);
                 }
                 else if (cell.PossibleTiles.Count == minEntropy)
                 {
@@ -91,10 +120,11 @@ namespace WFC3D
         {
             TileStruct chosenTile = cellToCollapse.PossibleTiles[UnityEngine.Random.Range(0, cellToCollapse.PossibleTiles.Count - 1)]; //ref
 
-            List<TileStruct> newPossibleTiles = new List<TileStruct>();
+            newPossibleTiles.Clear();
             newPossibleTiles.Add(chosenTile); //ajout ref
             int index = cellToCollapse.IndexInList;
-            _allCells[index] = new TileGridCell(newPossibleTiles, cellToCollapse.GridPos, true); // On remplace l'ancienne cellule panr la nouvelle dans la liste
+            TileGridCell newCell = new TileGridCell(newPossibleTiles, cellToCollapse.GridPos, true);
+            _allCells[index] = newCell; // On remplace l'ancienne cellule panr la nouvelle dans la liste
             _grid[cellToCollapse.GridPos.x, cellToCollapse.GridPos.y, cellToCollapse.GridPos.z] = new TileGridCell(newPossibleTiles, cellToCollapse.GridPos, true);
             return new TileGridCell(cellToCollapse); //return une ref
         }
@@ -115,40 +145,35 @@ namespace WFC3D
 
         private bool Propagate(TileGridCell collapsedCell) {
             if (collapsedCell.PossibleTiles.Count == 0) return false;
-            List<Vector3Int> directions = new List<Vector3Int>
-            {
-                new Vector3Int(1, 0, 0), //droite
-                new Vector3Int(-1, 0, 0), //gauche
-                new Vector3Int(0, 1, 0), //haut
-                new Vector3Int(0, -1, 0), //bas
-                new Vector3Int(0, 0, 1), //devant
-                new Vector3Int(0, 0, -1) //derri�re
-            };
+
             for (int i = 0; i < 6; i++)
             {
-                Vector3Int neighborPos = new Vector3Int(collapsedCell.GridPos.x, collapsedCell.GridPos.y, collapsedCell.GridPos.z) + directions[i];
+                neighborPos = collapsedCell.GridPos + directions[i];
                 if (!NeighborInGrid(neighborPos)) {
                     continue;
                 }
                 
-                TileGridCell neighbor = _grid[neighborPos.x, neighborPos.y, neighborPos.z];
+                neighbor = _grid[neighborPos.x, neighborPos.y, neighborPos.z];
                 if (neighbor.PossibleTiles.Count == 0)
                 {
                     return false;
                 }
                     
                 bool changed = false;
-                List<TileStruct> possibleTiles = new List<TileStruct>();
-                    
-                foreach (TileStruct tile in neighbor.PossibleTiles) {
-                    if (collapsedCell.PossibleTiles[0].Neighboors.GetNeighborList(i).Contains(tile.Id)) {
-                        possibleTiles.Add(tile);
+                propagatePossibleTiles.Clear();
+
+                for (int j = 0; j < neighbor.PossibleTiles.Count; j++)
+                {
+                    if (collapsedCell.PossibleTiles[0].Neighboors.GetNeighborList(i).Contains(neighbor.PossibleTiles[j].Id))
+                    {
+                        propagatePossibleTiles.Add(neighbor.PossibleTiles[j]);
                     }
-                    else {
+                    else
+                    {
                         changed = true;
                     }
                 }
-                neighbor.PossibleTiles = possibleTiles;
+                neighbor.PossibleTiles = new List<TileStruct>(propagatePossibleTiles);
 
                 if (!changed) {
                     continue;
