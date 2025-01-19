@@ -370,8 +370,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2337d98531b3fd94193423a268362ecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cellSize: 1
-  _gridSize: 10
+  _cellSize: 2
+  _gridSize: 2
 --- !u!114 &1844138934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384,9 +384,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4be355fb89c389742a3969c138c34331, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tileDatabase: {fileID: 11400000, guid: f7d3c945e546fe144b4be12e247cbb68, type: 2}
-  _grid: {fileID: 1844138933}
-  _neighboors: 4
+  PossibleTiles: []
+  GridPos: {x: 0, y: 0, z: 0}
+  Collapsed: 0
+  Visisted: 0
+  IndexInList: 0
 --- !u!114 &1844138935
 MonoBehaviour:
   m_ObjectHideFlags: 0

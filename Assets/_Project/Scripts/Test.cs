@@ -10,6 +10,7 @@ public class Test : MonoBehaviour
     [SerializeField] Tile_Database TileDatabase;
     void Start()
     {
-        Debug.Log(TileDatabase.CheckNeighboor(tests, tests2));
+        //Debug.Log(TileDatabase.CheckNeighboor(tests, tests2));
+        //Debug.Log(TileDatabase.Tiles[0].Neighboors[0]);
     }
 }

@@ -84,11 +84,13 @@ namespace WFC3D.Editor
         private void Import() {
             string[] indices =  _boundariesDatabase.CheckBoundaries(_mesh);
             
-            TileStruct tile = new TileStruct(_mesh, 0, indices[0], indices[1], indices[4], indices[5], indices[2], indices[3]);
-            for (int i = 0; i < 4; i++) {
+            TileStruct tile = new TileStruct(_mesh, 0, indices[0], indices[1], indices[4], indices[5], indices[2], indices[3] , _tileDatabase.ID);
+            for (int i = 0; i < 4; i++) 
+            {
                 _tileDatabase.AddTile(tile);
-                tile.Rotate();
-                Debug.Log("add tile");
+                tile.Rotate(_tileDatabase.ID);
+                //Debug.Log("add tile");
+                //Debug.Log(tile.Rotation);
             }
             
         }

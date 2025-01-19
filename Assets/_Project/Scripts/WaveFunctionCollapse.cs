@@ -1,20 +1,16 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
-using static Codice.CM.Common.CmCallContext;
 using Random = UnityEngine.Random;
 
 namespace WFC3D
 {
-    public struct TileGridCell
+    public class TileGridCell : MonoBehaviour
     {
         public List<TileStruct> PossibleTiles;
         public Vector3Int GridPos;
         public bool Collapsed;
         public bool Visisted;
+        public int IndexInList;
         
         public TileGridCell(List<TileStruct> possibleTiles, Vector3Int gridPos)
         {
@@ -22,6 +18,14 @@ namespace WFC3D
             GridPos = gridPos;
             Visisted = false;
             Collapsed = false;
+        }
+        public TileGridCell(List<TileStruct> possibleTiles, Vector3Int gridPos, int index)
+        {
+            PossibleTiles = new List<TileStruct>(possibleTiles);
+            GridPos = gridPos;
+            Visisted = false;
+            Collapsed = false;
+            IndexInList = index;
         }
         public TileGridCell(List<TileStruct> possibleTiles, Vector3Int gridPos, bool collapsed)
         {
@@ -71,14 +75,15 @@ namespace WFC3D
             }
         }
         public void Remove(TileStruct tile) {
-            List<TileStruct> newPossibleTile = new List<TileStruct>();
-            foreach (TileStruct possibleTile in PossibleTiles) {
-                if (possibleTile != tile) {
-                    newPossibleTile.Add(possibleTile);
-                }
-            }
-
-            PossibleTiles = newPossibleTile;
+            //List<TileStruct> newPossibleTile = new List<TileStruct>();
+            //foreach (TileStruct possibleTile in PossibleTiles) {
+            //    if (possibleTile != tile) {
+            //        newPossibleTile.Add(possibleTile);
+            //    }
+            //}
+            //
+            //PossibleTiles = newPossibleTile;
+            PossibleTiles.Remove(tile);
         }
     }
 }

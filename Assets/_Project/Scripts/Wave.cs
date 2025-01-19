@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,51 +29,55 @@ namespace WFC3D
 
         void SetGrid()
         {
+             int index = 0;
             for (int i = 0; i < range; i++)
             {
                 for (int j = 0; j < range; j++)
                 {
                     for (int k = 0; k < range; k++)
                     {
-                        _grid[i, j, k] = new TileGridCell(_dtb.Tiles, new Vector3Int(i, j, k));
+                        _grid[i, j, k] = new TileGridCell(_dtb.Tiles, new Vector3Int(i, j, k), index);
                         _allCells.Add(_grid[i, j, k]);
+                        index++;
+                        for(int l = 0; l < 6; l++)
+                        {
+                            //Debug.Log(_grid[i, j, k].PossibleTiles[k].Neighboors.GetNeighbor(l).Count);
+                        }
                     }
                 }
             }
         }
 
         void WFC() {
-            // while (!_allCells.TrueForAll(cell => cell.Collapsed))
-            // {
-            //     foreach (TileGridCell cell in _allCells) {
-            //         foreach (TileStruct tile in cell.PossibleTiles) {
-            //             Debug.Log(tile.Mesh.GetInstanceID());
-            //         }
-            //     }
-            //     
-            //     if (!Propagate(CollapseCell(SelectCellWithSmallestEntropy())))
-            //     {
-            //         ResetAlgo();
-            //         Debug.Log("Retry");
-            //     }
-//
-            //     _visited = new bool[range, range, range];
-            // }
-            for (int i = 0; i < 40; i++) {
-                if (_allCells.TrueForAll(cell => cell.Collapsed)) {
-                    Debug.Log("end");
-                    break;
-                }
-                if (!Propagate(CollapseCell(SelectCellWithSmallestEntropy()))) {
+            while (!_allCells.TrueForAll(cell => cell.Collapsed))
+            {
+               
+                if (!Propagate(CollapseCell(SelectCellWithSmallestEntropy())))
+                {
                     ResetAlgo();
                     Debug.Log("Retry");
                 }
-
                 _visited = new bool[range, range, range];
-                
             }
+            //for (int i = 0; i < 40; i++) {
+            //    Debug.Log("nouvelle boucle");
+            //    if (_allCells.TrueForAll(cell => cell.Collapsed)) {
+            //        Debug.Log("end");
+            //        break;
+            //    }
+            //    bool a = Propagate(CollapseCell(SelectCellWithSmallestEntropy()));
+            //    Debug.Log("Propagete : " + a);
+            //    if (!a) {
+            //        ResetAlgo();
+            //        Debug.Log("Retry");
+            //    }
+            //
+            //    _visited = new bool[range, range, range];
+            //    
+            //}
             foreach (var VARIABLE in _allCells) {
                 InstantialeObj(VARIABLE);
+                Debug.Log(VARIABLE.Collapsed);
             }
         }
         void ResetAlgo()
@@ -114,6 +119,7 @@ namespace WFC3D
                     _smallestEntropyCells.Add(cell);
                 }
             }
+            Debug.Log("minenthropy value:" + minEntropy + " with " + _smallestEntropyCells[0].PossibleTiles.Count + " possibilities");
             return _smallestEntropyCells[UnityEngine.Random.Range(0, _smallestEntropyCells.Count - 1)]; //là c une ref
         }
 
@@ -123,10 +129,13 @@ namespace WFC3D
 
             List<TileStruct> _newPossibleTiles = new List<TileStruct>();
             _newPossibleTiles.Add(_chosenTile); //ajout ref
-            int index = _allCells.IndexOf(_cellToCollapse);
-            _allCells[index] = new TileGridCell(_newPossibleTiles, _cellToCollapse.GridPos, true); // On remplace l'ancienne cellule par la nouvelle dans la liste
+            //int index = _allCells.IndexOf(_cellToCollapse);
+            int index = _cellToCollapse.IndexInList;
+            Debug.Log("collapse at " + _cellToCollapse.GridPos + " with " + _cellToCollapse.PossibleTiles.Count + " possibilities" + " in" + index + " of allcells");
+            _allCells[index] = new TileGridCell(_newPossibleTiles, _cellToCollapse.GridPos, true); // On remplace l'ancienne cellule panr la nouvelle dans la liste
             _grid[_cellToCollapse.GridPos.x, _cellToCollapse.GridPos.y, _cellToCollapse.GridPos.z] = new TileGridCell(_newPossibleTiles, _cellToCollapse.GridPos, true);
             //InstantialeObj(new TileGridCell(_newPossibleTiles, _cellToCollapse.GridPos, true));
+            Debug.Log( "new value :" + _allCells[index].Collapsed + "with " + _allCells[index].PossibleTiles.Count + " possibilites");
             return new TileGridCell(_cellToCollapse); //return une ref
         }
 
@@ -173,12 +182,22 @@ namespace WFC3D
 
                             if (neighbor.PossibleTiles.Count == 0)
                             {
+                                Debug.Log("no possible tiles Je return false");
                                 return false;
                             }
-                            Debug.Log(_dtb.Tiles.IndexOf(tile) + " compared with " + _dtb.Tiles.IndexOf(_collapsedCell.PossibleTiles[0]) + "at " + i);
-                            bool b = _dtb.CheckNeighboor(tile.Faces[i], _collapsedCell.PossibleTiles[0].Faces[GetOppositeFace(i)]);
-                            Debug.Log(b);
-                            if(!b)
+                            //Debug.Log(_dtb.Tiles.IndexOf(tile) + " compared with " + _dtb.Tiles.IndexOf(_collapsedCell.PossibleTiles[0]) + "at " + i);
+                            //bool b = _dtb.CheckNeighboor(tile.Faces[i], _collapsedCell.PossibleTiles[0].Faces[GetOppositeFace(i)]);
+                            bool b = false;
+                                if(_collapsedCell.PossibleTiles[0].Neighboors == null) Debug.Log("null");
+                                if (_collapsedCell.PossibleTiles[0].Neighboors.GetNeighborList(i).Contains(tile.Id))
+                                {
+
+                                    b = true;
+                                    Debug.Log("neighboor found for " + _collapsedCell.PossibleTiles[0].Id + " at " + i + " for this neigh" + tile.Id );
+                                break;
+                                }
+                                //Debug.Log(b);
+                                if (!b)
                             {
                                 //Debug.Log(_dtb.Tiles.IndexOf(tile));
                                 neighbor.Remove(tile);
@@ -186,21 +205,27 @@ namespace WFC3D
 
                             }
                         }
+                        Debug.Log("WSH");
                         _grid[neighborPos.x, neighborPos.y, neighborPos.z] = neighbor;
                         if (_changed)
                         {
                             if (!Propagate(neighbor)) {
+                                Debug.Log("propagate failed Je return false");
                                 return false;
                             }
                         }
                     }
                 }
             }
+            Debug.Log("propagate success Je return true");
             return true;
         }
 
-        int GetOppositeFace(int face) {
-            switch (face) {
+        bool NeighborInGrid(Vector3Int pos) => pos.x >= 0 && pos.x < range && pos.y >= 0 && pos.y < range && pos.z >= 0 && pos.z < range;
+        int GetOppositeFace(int face)
+        {
+            switch (face)
+            {
                 case 0: return 1;
                 case 1: return 0;
                 case 2: return 3;
@@ -210,7 +235,6 @@ namespace WFC3D
                 default: return -1;
             }
         }
-        bool NeighborInGrid(Vector3Int pos) => pos.x >= 0 && pos.x < range && pos.y >= 0 && pos.y < range && pos.z >= 0 && pos.z < range;
 
     }
 }

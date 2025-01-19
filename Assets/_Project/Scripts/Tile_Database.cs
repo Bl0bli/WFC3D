@@ -9,29 +9,61 @@ namespace WFC3D
     public class Tile_Database : ScriptableObject
     {
         public List<TileStruct> Tiles;
+        public int ID = 0;
 
-        public List<TileStruct>[] AddTile(TileStruct tile)
+        //public List<TileStruct>[] AddTile(TileStruct tile)
+        public void Reset()
         {
+            Tiles.Clear();
+            ID = 0;
+        }
+        public Neighbors AddTile(TileStruct tile)
+        {
+            TileStruct newTile = new TileStruct(tile);
             foreach (TileStruct t in Tiles)
             {
-                if (t.Mesh == tile.Mesh && t.Rotation == tile.Rotation)
+                if (t.Mesh == newTile.Mesh && t.Rotation == newTile.Rotation)
                 {
+                    //Debug.Log(t.Rotation + " " + tile.Rotation);
                     return null;
                 }
                 for(int i = 0; i<6; i++) 
                 {
-                    if(CheckNeighboor(t.Faces[i], tile.Faces[i]))
+                    bool b = CheckNeighboor(t.Faces[i], newTile.Faces[GetOppositeFace(i)]);
+                    Debug.Log("Check Neighboor : " + t.Id + " on Face " + i + " and " + newTile.Id + " on Face " + GetOppositeFace(i) + " : " + b);
+                    if (b)
                     {
-                        t.Neighboors[i].Add(tile);
-                        tile.Neighboors[i].Add(t);
+                        //t.Neighboors[i].Add(tile);
+                        //tile.Neighboors[i].Add(t);
+                       // if (!t.Neighboors.GetNeighbor(i).Contains(tile))
+                       // {
+                       //     t.Neighboors.GetNeighbor(i).Add(tile);
+                       //     tile.Neighboors.GetNeighbor(i).Add(t);
+                       // }
+
+                        if (!t.Neighboors.GetNeighborList(i).Contains(newTile.Id))
+                        {
+                            t.Neighboors.GetNeighborList(i).Add(newTile.Id);
+                            Debug.Log("Add Neighboor " + newTile.Id + " to " + t.Id + " on Face " + i);
+
+                        }
+                        if(!newTile.Neighboors.GetNeighborList(GetOppositeFace(i)).Contains(t.Id))
+                        {
+                            newTile.Neighboors.GetNeighborList(GetOppositeFace(i)).Add(t.Id);
+                        }
                     }
                 }
             }
-            Tiles.Add(tile);
-            return tile.Neighboors;
+            //Debug.Log("Add Tile " + tile.Rotation);
+            Tiles.Add(newTile);
+            ID++;
+            //newTile.SetID(_id);
+            //return tile.Neighboors;
+            return newTile.Neighboors;
         }
 
-        public List<TileStruct>[] RemoveTile (TileStruct tile)
+        //public List<TileStruct>[] RemoveTile (TileStruct tile)
+        public Neighbors RemoveTile(TileStruct tile)
         {
             foreach (TileStruct t in Tiles)
             {
@@ -42,10 +74,14 @@ namespace WFC3D
                 }
                 for (int i = 0; i < 5; i++)
                 {
-                    if (CheckNeighboor(t.Faces[i], tile.Faces[i]))
+                    if (CheckNeighboor(t.Faces[i], tile.Faces[GetOppositeFace(i)]))
                     {
-                        t.Neighboors[i].Remove(tile);
-                        tile.Neighboors[i].Remove(t);
+                        //t.Neighboors[i].Remove(tile);
+                        //tile.Neighboors[i].Remove(t);
+                        //t.Neighboors.GetNeighbor(i).Remove(tile);
+                        //tile.Neighboors.GetNeighbor(i).Remove(t);
+                        t.Neighboors.GetNeighborList(i).Remove(tile.Id);
+                        tile.Neighboors.GetNeighborList(GetOppositeFace(i)).Remove(t.Id);
                     }
                 }
             }
@@ -120,6 +156,19 @@ namespace WFC3D
             return ((num1 == num2 && (chara1 == "s" && chara2 == "s")) || // SYMETRIQUE
                 (num1 == num2 && (chara1 == "" || chara2 == "") && (chara1 == "f" || chara2 == "f")) || // ASYMETRIQUE
                 (num1 < 0 && num2 < 0)); // BORD
+        }
+        int GetOppositeFace(int face)
+        {
+            switch (face)
+            {
+                case 0: return 1;
+                case 1: return 0;
+                case 2: return 3;
+                case 3: return 2;
+                case 4: return 5;
+                case 5: return 4;
+                default: return -1;
+            }
         }
     }
 }
