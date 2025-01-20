@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -27,7 +25,7 @@ namespace WFC3D
         Vector3Int neighborPos = new Vector3Int(0, 0, 0);
 
 
-        private int _range;
+        private Vector3Int _range;
         Vector3Int[] directions = 
             {
                 new Vector3Int(1, 0, 0), //droite
@@ -37,27 +35,29 @@ namespace WFC3D
                 new Vector3Int(0, 0, 1), //devant
                 new Vector3Int(0, 0, -1) //derri�re
             };
-        #endregion
+        #endregion//Ces propriétés pourrait être déclarées localement mais on évite de le faire pour ne pas faire de l'allocation mémoire à chaque itération
 
-        private void Start()
+        private void Setup()
         {
             _DefaultallCells = new List<TileGridCell>();
             _allCells = new List<TileGridCell>();
             _range = _gridScript.GridSize;
-            _grid = new TileGridCell[_range, _range, _range];
-            _Defaultgrid = new TileGridCell[_range, _range, _range];
+            _grid = new TileGridCell[_range.x, _range.y, _range.z];
+            _Defaultgrid = new TileGridCell[_range.x, _range.y, _range.z];
             SetGrid();
-            WFC();
         }
+
+      
+    
 
         private void SetGrid()
         {
              int index = 0;
-            for (int i = 0; i < _range; i++)
+            for (int i = 0; i < _range.x; i++)
             {
-                for (int j = 0; j < _range; j++)
+                for (int j = 0; j < _range.y; j++)
                 {
-                    for (int k = 0; k < _range; k++)
+                    for (int k = 0; k < _range.z; k++)
                     {
                         _grid[i, j, k] = new TileGridCell(_dtb.Tiles, new Vector3Int(i, j, k), index);
                         _Defaultgrid[i, j, k] = new TileGridCell(_dtb.Tiles, new Vector3Int(i, j, k), index);
@@ -70,7 +70,8 @@ namespace WFC3D
             }
         }
 
-        private void WFC() {
+        public void WFC() {
+            Setup();
             while (!_allCells.TrueForAll(cell => cell.Collapsed))
             {
                
@@ -88,7 +89,7 @@ namespace WFC3D
         {
             _allCells = new List<TileGridCell>();
             _range = _gridScript.GridSize;
-            _grid = new TileGridCell[_range, _range, _range];
+            _grid = new TileGridCell[_range.x, _range.y, _range.z];
             SetGrid();
         }
 
@@ -186,7 +187,7 @@ namespace WFC3D
             return true;
         }
 
-        private bool NeighborInGrid(Vector3Int pos) => pos.x >= 0 && pos.x < _range && pos.y >= 0 && pos.y < _range && pos.z >= 0 && pos.z < _range;
+        private bool NeighborInGrid(Vector3Int pos) => pos.x >= 0 && pos.x < _range.x && pos.y >= 0 && pos.y < _range.y && pos.z >= 0 && pos.z < _range.z;
     }
 }
 

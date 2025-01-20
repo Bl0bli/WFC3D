@@ -4,10 +4,10 @@ using UnityEditor;
 public class Grid : MonoBehaviour
 {
     [SerializeField] int _cellSize = 25;
-    [SerializeField] int _gridSize = 50;
+    [SerializeField] Vector3Int _gridSize = new Vector3Int(2,2,2);
 
     public int CellSize { get => _cellSize; set => _cellSize = value; }
-    public int GridSize { get => _gridSize; set => _gridSize = value; }
+    public Vector3Int GridSize { get => _gridSize; set => _gridSize = value; }
 
     void Start()
     {

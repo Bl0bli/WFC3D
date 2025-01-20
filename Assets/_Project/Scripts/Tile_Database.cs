@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace WFC3D
     {
         public List<TileStruct> Tiles = new List<TileStruct>();
         public int ID = 0;
+        public event Action<bool> _UpdateDtb;
 
         //public List<TileStruct>[] AddTile(TileStruct tile)
         public void Reset()
@@ -22,6 +24,7 @@ namespace WFC3D
         }
         public Neighbors AddTile(TileStruct tile)
         {
+            _UpdateDtb?.Invoke(true);
             TileStruct newTile = new TileStruct(tile);
             Tiles.Add(newTile);
             ID++;
@@ -57,40 +60,42 @@ namespace WFC3D
             //Debug.Log("Add Tile " + tile.Rotation);
             //newTile.SetID(_id);
             //return tile.Neighboors;
+            _UpdateDtb?.Invoke(false);
             return newTile.Neighboors;
         }
 
         //public List<TileStruct>[] RemoveTile (TileStruct tile)
-        public Neighbors RemoveTile(TileStruct tile)
+        public void RemoveTile(TileStruct tile)
         {
-            foreach (TileStruct t in Tiles)
+            _UpdateDtb?.Invoke(true);
+            if (Tiles.Contains(tile))
             {
-                if (t.Mesh == tile.Mesh)
+                Tiles.Remove(tile);
+                foreach (TileStruct t in Tiles)
                 {
-                    Tiles.Remove(t);
-                    return t.Neighboors;
-                }
-                for (int i = 0; i < 5; i++)
-                {
-                    if (CheckNeighboor(t.Faces[i], tile.Faces[GetOppositeFace(i)]))
+                    for (int i = 0; i < 6; i++)
                     {
-                        //t.Neighboors[i].Remove(tile);
-                        //tile.Neighboors[i].Remove(t);
-                        //t.Neighboors.GetNeighbor(i).Remove(tile);
-                        //tile.Neighboors.GetNeighbor(i).Remove(t);
-                        t.Neighboors.GetNeighborList(i).Remove(tile.Id);
-                        tile.Neighboors.GetNeighborList(GetOppositeFace(i)).Remove(t.Id);
+                        if (t.Neighboors.GetNeighborList(i).Contains(tile.Id))
+                        {
+                            t.Neighboors.GetNeighborList(i).Remove(tile.Id);
+                        }
                     }
                 }
+                ID = 0;
+                foreach (TileStruct t in Tiles)
+                {
+                    t.SetID(ID);
+                    ID++;
+                }
+                _UpdateDtb?.Invoke(false);
             }
-            return null;
         }
         public List<TileStruct> GetRandomTile(List<TileStruct> _tiles)
         {
             while (_tiles.Count > 1)
             {
                 int count = _tiles.Count;
-                _tiles.RemoveAt(Random.Range(0, _tiles.Count - 1));
+                _tiles.RemoveAt(UnityEngine.Random.Range(0, _tiles.Count - 1));
                 
             }
             return _tiles;

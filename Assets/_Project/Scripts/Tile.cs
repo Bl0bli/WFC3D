@@ -41,6 +41,15 @@ namespace WFC3D
         //            return null;
         //    }
         //}
+        public void ClearNeighboors()
+        {
+            i_Right.Clear();
+            i_Left.Clear();
+            i_Up.Clear();
+            i_Down.Clear();
+            i_Front.Clear();
+            i_Back.Clear();
+        }
 
         public List<int> GetNeighborList(int face)
         {
@@ -101,8 +110,13 @@ namespace WFC3D
             _id = tileToClone.Id;
         }
 
+        public void ClearTile()
+        {
+
+        }
         public void SetID(int id)
         {
+            Debug.Log("Set ID " + _id + " to " + id);
             _id = id;
         }
         public void Rotate(int ID) {
