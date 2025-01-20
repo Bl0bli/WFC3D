@@ -74,7 +74,6 @@ namespace WFC3D
             Setup();
             while (!_allCells.TrueForAll(cell => cell.Collapsed))
             {
-               
                 if (!Propagate(CollapseCell(SelectCellWithSmallestEntropy())))
                 {
                     ResetAlgo();
@@ -190,7 +189,8 @@ namespace WFC3D
             return true;
         }
 
-        private bool NeighborInGrid(Vector3Int pos) => pos.x >= 0 && pos.x < _range.x && pos.y >= 0 && pos.y < _range.y && pos.z >= 0 && pos.z < _range.z;
+        private bool NeighborInGrid(Vector3Int pos) => (pos.x >= 0) && (pos.x < _range.x) && (pos.y >= 0) &&
+                                                       (pos.y < _range.y) && (pos.z >= 0) && (pos.z < _range.z);
     }
 }
 
