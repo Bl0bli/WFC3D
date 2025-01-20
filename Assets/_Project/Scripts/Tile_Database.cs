@@ -9,7 +9,7 @@ namespace WFC3D
     [CreateAssetMenu(menuName = "DatabaseTile")]
     public class Tile_Database : ScriptableObject
     {
-        public List<TileStruct> Tiles;
+        public List<TileStruct> Tiles = new List<TileStruct>();
         public int ID = 0;
 
         //public List<TileStruct>[] AddTile(TileStruct tile)
