@@ -41,6 +41,15 @@ namespace WFC3D
         //            return null;
         //    }
         //}
+        public void ClearNeighboors()
+        {
+            i_Right.Clear();
+            i_Left.Clear();
+            i_Up.Clear();
+            i_Down.Clear();
+            i_Front.Clear();
+            i_Back.Clear();
+        }
 
         public List<int> GetNeighborList(int face)
         {
@@ -68,13 +77,13 @@ namespace WFC3D
     public class TileStruct
     {
         [SerializeField] int _id;
-        [VisibleInDebugInspector] Mesh _mesh;
-        [VisibleInDebugInspector] int _rotation;
+        [SerializeField] Mesh _mesh;
+        [SerializeField] int _rotation;
 
-        [VisibleInDebugInspector] string[] _faces;                            // 0 = right, 1 = left, 2 = up, 3 = down, 4 = front, 5 = back
+        [SerializeField] string[] _faces;                            // 0 = right, 1 = left, 2 = up, 3 = down, 4 = front, 5 = back
 
         //[SerializeField] List<TileStruct>[] _neighboors;
-        [VisibleInDebugInspector] Neighbors _neighboors;
+        [SerializeField] Neighbors _neighboors;
 
         public Mesh Mesh { get => _mesh; }
         public string[] Faces { get => _faces; }
@@ -101,8 +110,13 @@ namespace WFC3D
             _id = tileToClone.Id;
         }
 
+        public void ClearTile()
+        {
+
+        }
         public void SetID(int id)
         {
+            Debug.Log("Set ID " + _id + " to " + id);
             _id = id;
         }
         public void Rotate(int ID) {
