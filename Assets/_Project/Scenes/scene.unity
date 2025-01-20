@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cellSize: 2
-  _gridSize: 3
+  _gridSize: {x: 2, y: 2, z: 2}
 --- !u!4 &604288765
 Transform:
   m_ObjectHideFlags: 0
@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gridScript: {fileID: 604288763}
-  _dtb: {fileID: 11400000, guid: f7d3c945e546fe144b4be12e247cbb68, type: 2}
+  _dtb: {fileID: 11400000, guid: 9d8848cf61cfdc747ad68e0f319f4a24, type: 2}
 --- !u!1 &632778055
 GameObject:
   m_ObjectHideFlags: 0

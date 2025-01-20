@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,7 +8,9 @@ namespace WFC3D
     public class Wave : MonoBehaviour
     {
         [SerializeField] private Grid _gridScript;
-        [SerializeField] private Tile_Database _dtb;
+        [SerializeField] public Tile_Database _dtb;
+
+        public event Action<GameObject[]> InstanciatedTilesEvent;
 
         #region Grid
         private List<TileGridCell> _allCells;
@@ -46,10 +49,7 @@ namespace WFC3D
             _Defaultgrid = new TileGridCell[_range.x, _range.y, _range.z];
             SetGrid();
         }
-
-      
-    
-
+        
         private void SetGrid()
         {
              int index = 0;
@@ -80,9 +80,11 @@ namespace WFC3D
                     ResetAlgo();
                 }
             }
+            List<GameObject> gos = new List<GameObject>();
             foreach (var tile in _allCells) {
-                InstantiateObj(tile);
+                gos.Add(InstantiateObj(tile));
             }
+            InstanciatedTilesEvent?.Invoke(gos.ToArray());
         }
 
         private void ResetAlgo()
@@ -130,7 +132,7 @@ namespace WFC3D
             return new TileGridCell(cellToCollapse); //return une ref
         }
 
-        private void InstantiateObj(TileGridCell cellToInstantiate)
+        private GameObject InstantiateObj(TileGridCell cellToInstantiate)
         {
             GameObject go = new GameObject();
             go.AddComponent<MeshFilter>().mesh = cellToInstantiate.PossibleTiles[0].Mesh;
@@ -142,6 +144,7 @@ namespace WFC3D
                 cellToInstantiate.GridPos.z * _gridScript.CellSize
                 );
             go.transform.rotation = Quaternion.Euler(0, cellToInstantiate.PossibleTiles[0].Rotation * -90, 0);
+            return go;
         }
 
         private bool Propagate(TileGridCell collapsedCell) {
