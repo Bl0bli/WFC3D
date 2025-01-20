@@ -68,13 +68,13 @@ namespace WFC3D
     public class TileStruct
     {
         [SerializeField] int _id;
-        [SerializeField] Mesh _mesh;
-        [SerializeField] int _rotation;
+        [VisibleInDebugInspector] Mesh _mesh;
+        [VisibleInDebugInspector] int _rotation;
 
-        [SerializeField] string[] _faces;                            // 0 = right, 1 = left, 2 = up, 3 = down, 4 = front, 5 = back
+        [VisibleInDebugInspector] string[] _faces;                            // 0 = right, 1 = left, 2 = up, 3 = down, 4 = front, 5 = back
 
         //[SerializeField] List<TileStruct>[] _neighboors;
-        [SerializeField] Neighbors _neighboors;
+        [VisibleInDebugInspector] Neighbors _neighboors;
 
         public Mesh Mesh { get => _mesh; }
         public string[] Faces { get => _faces; }

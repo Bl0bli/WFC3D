@@ -317,7 +317,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1844138932}
-  - component: {fileID: 1844138931}
   - component: {fileID: 1844138933}
   - component: {fileID: 1844138934}
   - component: {fileID: 1844138935}
@@ -328,21 +327,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1844138931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1844138930}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5cee0ba784f9664685e54141204a828, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tests: v0_0
-  tests2: 2s
-  TileDatabase: {fileID: 11400000, guid: f7d3c945e546fe144b4be12e247cbb68, type: 2}
 --- !u!4 &1844138932
 Transform:
   m_ObjectHideFlags: 0
@@ -371,7 +355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cellSize: 2
-  _gridSize: 2
+  _gridSize: {x: 2, y: 2, z: 2}
 --- !u!114 &1844138934
 MonoBehaviour:
   m_ObjectHideFlags: 0

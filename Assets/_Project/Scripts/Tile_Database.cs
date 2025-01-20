@@ -10,7 +10,7 @@ namespace WFC3D
     public class Tile_Database : ScriptableObject
     {
         public List<TileStruct> Tiles;
-        public int ID = 0;
+        [VisibleInDebugInspector] public int ID = 0;
 
         //public List<TileStruct>[] AddTile(TileStruct tile)
         public void Reset()
@@ -63,13 +63,9 @@ namespace WFC3D
         //public List<TileStruct>[] RemoveTile (TileStruct tile)
         public Neighbors RemoveTile(TileStruct tile)
         {
+            Neighbors n = new Neighbors();
             foreach (TileStruct t in Tiles)
             {
-                if (t.Mesh == tile.Mesh)
-                {
-                    Tiles.Remove(t);
-                    return t.Neighboors;
-                }
                 for (int i = 0; i < 5; i++)
                 {
                     if (CheckNeighboor(t.Faces[i], tile.Faces[GetOppositeFace(i)]))
@@ -83,7 +79,13 @@ namespace WFC3D
                     }
                 }
             }
-            return null;
+            Tiles.Remove(tile);
+            ID = 0;
+            for(int i = 0; i < Tiles.Count; i++)
+            {
+                Tiles[i].SetID(i);
+            }
+            return n;
         }
         public List<TileStruct> GetRandomTile(List<TileStruct> _tiles)
         {
